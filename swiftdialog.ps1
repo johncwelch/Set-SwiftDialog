@@ -122,7 +122,7 @@ function icon {
 			} else {
 				return "Invalid icon alpha variable, it must be a decimal number between 0.0 and 1.0"
 			}
-			#add the icon alpha to the return
+			#put the icon alpha in the return
 			$theReturn = "$theReturn --iconalpha $SDIconAlpha "
 		} else {
 			return "Invalid icon alpha variable, it must be a decimal number between 0.0 and 1.0"
