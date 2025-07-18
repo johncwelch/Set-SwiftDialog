@@ -1,7 +1,9 @@
 $swiftDialogPath = "/Applications/Dialog.app/Contents/MacOS/Dialog"
 $theReturn = "$swiftDialogPath"
 
-##enums 
+#We're using enums here because they help avoid the wrong params. PowerShell throws lovely errors
+#when you don't use the right values for the enums
+##enums
 
 #icon type
 enum iconType {
