@@ -55,6 +55,8 @@ function helpMessage {
 
 function icon {
 	param (
+		#since the first four parameters for icons are mutually exclusive, we use parameter sets.
+		#you have to have ONE of the four, but only one of the four
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconPath')] [string] $SDIconPath,
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconURL')] [string] $SDIconURL,
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconType')] [iconType] $SDIconName,
