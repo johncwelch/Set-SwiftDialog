@@ -64,7 +64,8 @@ function icon {
 		[Parameter(Mandatory = $false)] [double] $SDIconAlpha,
 		[Parameter(Mandatory = $false)] [string] $SDIconDark,
 		[Parameter(Mandatory = $false)] [double] $SDIconSize,
-		[Parameter(Mandatory = $false)] [iconPosition] $SDIconPosition
+		[Parameter(Mandatory = $false)] [iconPosition] $SDIconPosition,
+		[Parameter(Mandatory = $false)] [string] $SDIconOverlay
 	)
 
 	if($SDIconPath) {
@@ -138,6 +139,10 @@ function icon {
 
 	if($SDIconPosition) {
 		$theReturn = "$theReturn --$SDIconPosition "
+	}
+
+	if($SDIconOverlay) {
+		$theReturn = "$theReturn --overlayicon `"$SDIconOverlay`" "
 	}
 
 	return $theReturn
