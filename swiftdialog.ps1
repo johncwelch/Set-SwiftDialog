@@ -15,8 +15,8 @@ enum iconType {
 
 #icon position
 enum iconPosition {
-	center
-	centre
+	centericon
+	centericon
 }
 
 #message horizontal alignment
@@ -63,7 +63,8 @@ function icon {
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconText')] [string] $SDIconText,
 		[Parameter(Mandatory = $false)] [double] $SDIconAlpha,
 		[Parameter(Mandatory = $false)] [string] $SDIconDark,
-		[Parameter(Mandatory = $false)] [double] $SDIconSize
+		[Parameter(Mandatory = $false)] [double] $SDIconSize,
+		[Parameter(Mandatory = $false)] [iconPosition] $SDIconPosition
 	)
 
 	if($SDIconPath) {
@@ -133,6 +134,10 @@ function icon {
 
 	if($SDIconSize) {
 		$theReturn = "$theReturn --iconsize $SDIconSize "
+	}
+
+	if($SDIconPosition) {
+		$theReturn = "$theReturn --$SDIconPosition "
 	}
 
 	return $theReturn
