@@ -19,6 +19,27 @@ enum iconPosition {
 	centericon
 }
 
+#SF icon weight
+enum SFIconWeight {
+	thin
+	light
+	regular
+	medium
+	heavy
+	bold
+}
+
+#SF icon animation type
+enum SFAnimationType {
+	variable
+	variablereverse
+	variableiterative
+	variableiterativereversing
+	variablecumulative
+	pulse
+	pulsebylayer
+}
+
 #message horizontal alignment
 enum mhorizalign {
 	left
@@ -61,11 +82,17 @@ function icon {
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconURL')] [string] $SDIconURL,
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconType')] [iconType] $SDIconName,
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconText')] [string] $SDIconText,
+		[Parameter(Mandatory = $true, ParameterSetName = 'icontSF')] [string] $SDSFIconName,
 		[Parameter(Mandatory = $false)] [double] $SDIconAlpha,
 		[Parameter(Mandatory = $false)] [string] $SDIconDark,
 		[Parameter(Mandatory = $false)] [double] $SDIconSize,
 		[Parameter(Mandatory = $false)] [iconPosition] $SDIconPosition,
-		[Parameter(Mandatory = $false)] [string] $SDIconOverlay
+		[Parameter(Mandatory = $false)] [string] $SDIconOverlay,
+		[Parameter(Mandatory = $false)] [SFIconWeight] $SDSFIconWeight,
+		[Parameter(Mandatory = $false)] [SFAnimationType] $SDSFAnimationType,
+		[Parameter(Mandatory = $false)] [string] $SDSFIconColor1,
+		[Parameter(Mandatory = $false)] [string] $SDSFIconColor2,
+		[Parameter(Mandatory = $false)] [string] $SDSFIconPalette
 	)
 
 	if($SDIconPath) {
@@ -148,6 +175,9 @@ function icon {
 	return $theReturn
 }
 
+function iconOverlay {
+	
+}
 function mhalignment {
 	#only works if --style not used. Another parameter set, 
 	param (
