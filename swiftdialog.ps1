@@ -82,7 +82,7 @@ function icon {
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconURL')] [string] $SDIconURL,
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconType')] [iconType] $SDIconName,
 		[Parameter(Mandatory = $true, ParameterSetName = 'iconText')] [string] $SDIconText,
-		[Parameter(Mandatory = $true, ParameterSetName = 'icontSF')] [string] $SDSFIconName,
+		[Parameter(Mandatory = $true, ParameterSetName = 'iconSF')] [string] $SDSFIconName,
 		[Parameter(Mandatory = $false)] [double] $SDIconAlpha,
 		[Parameter(Mandatory = $false)] [string] $SDIconDark,
 		[Parameter(Mandatory = $false)] [double] $SDIconSize,
@@ -176,7 +176,7 @@ function icon {
 }
 
 function iconOverlay {
-	
+
 }
 function mhalignment {
 	#only works if --style not used. Another parameter set, 
