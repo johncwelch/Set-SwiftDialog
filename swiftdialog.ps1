@@ -16,7 +16,7 @@ enum iconType {
 #icon position
 enum iconPosition {
 	centericon
-	centericon
+	centreicon
 }
 
 #SF icon weight
@@ -90,11 +90,17 @@ function icon {
 		[Parameter(Mandatory = $false)] [string] $SDIconOverlay,
 		[Parameter(Mandatory = $false)] [SFIconWeight] $SDSFIconWeight,
 		[Parameter(Mandatory = $false)] [SFAnimationType] $SDSFAnimationType,
-		[Parameter(Mandatory = $false)] [string] $SDSFIconColor1,
+		[Parameter(Mandatory = $false)] [string] $SDSFIconColor,
 		[Parameter(Mandatory = $false)] [string] $SDSFIconColor2,
 		[Parameter(Mandatory = $false)] [string] $SDSFIconPalette
 	)
 
+	#function globals
+	$theSFAnimationType = ""
+
+	#This is where we handle the 5 "main" icon options, i.e. the mutually exclusive ones
+	#since one of these has to exist for the function to run at all, this allows us to
+	#make that assumption. 
 	if($SDIconPath) {
 		#if they specificed a dark mode icon path and a "regular" path
 		#We are only FW dark mode here.
@@ -106,12 +112,56 @@ function icon {
 		}
 		
 	} elseif ($SDIconURL) {
-		#add URL validation code (format, not if what it points at is right)
+		#thought about doing URL Format validation, then realized that would be more
+		#work than it's worth. So what you pass is what you get.
 		$theReturn = "$theReturn  --icon `"$SDIconURL`" "
 	} elseif ($SDIconName) {
 		$theReturn = "$theReturn  --icon $SDIconName "
-	} else {
+	} elseif ($SDIconText) {
 		$theReturn = "$theReturn --icon text=`"$SDIconText`" "
+	} else {
+		#SF handling here
+		#building this out as we hit the different options
+		#basic option.
+		#also, no use of quotes here, doesn't work if you do. Sigh.
+		#we'll add the trailing space at the end
+		$theReturn = "$theReturn --icon SF=$SDSFIconName"
+
+		#the basics are done, now the options, yey
+		if ($SDSFIconColor) {
+			$theReturn = "$theReturn,color=$SDSFIconColor"
+		} 
+		
+		if ($SDSFIconColor2) {
+			$theReturn = "$theReturn,color2=$SDSFIconColor2"
+		} 
+		
+		if ($SDSFIconWeight) {
+			$theReturn = "$theReturn,weight=$SDSFIconWeight"
+		} 
+		
+		if ($SDSFIconPalette) {
+			$theReturn = "$theReturn,palette=$SDSFIconPalette"
+		} 
+		
+		if ($SDSFAnimationType) {
+			#this gets tedious because of limitations in PS enums
+			#so we implement this as a switch because unlike the SF options
+			#if we get here we KNOW there's an option and there's only one
+			switch ($SDSFAnimationType) {
+				"variable" { $theSFAnimationType = $SDSFAnimationType }
+				"variablereverse" {$theSFAnimationType = "variable.reversing"}
+				"variableiterative" {$theSFAnimationType = "variable.iterative"}
+				"variableiterativereversing" {$theSFAnimationType = "variable.iterative.reversing"}
+				"variablecumulative" {$theSFAnimationType = "variable.cumulative"}
+				"pulse" {$theSFAnimationType = "pulse"}
+				"pulsebylayer" {$theSFAnimationType = "pulse.bylayer"}
+				Default {""}
+			}
+			$theReturn = "$theReturn,animation=$theSFAnimationType"
+		}
+		#insert the trailing space for other params
+		$theReturn = "$theReturn "
 	}
 
 	#yes, yes, extra code for the alpha, but we catch a lot of human error here.
@@ -171,6 +221,8 @@ function icon {
 	if($SDIconOverlay) {
 		$theReturn = "$theReturn --overlayicon `"$SDIconOverlay`" "
 	}
+	
+
 
 	return $theReturn
 }
@@ -226,7 +278,7 @@ function title {
 
 
 
-$theIconPath = icon -SDIconText "🙄" -SDIconAlpha 1.0
+$theIconPath = icon -SDSFIconName "rainbow" -SDSFIconColor "auto" -SDSFIconWeight "heavy" -SDSFAnimationType "variableiterativereversing"
 $theIconPath
 
 #Invoke-Expression "$swiftDialogPath --title blah
