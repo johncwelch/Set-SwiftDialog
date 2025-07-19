@@ -221,9 +221,6 @@ function icon {
 	if($SDIconOverlay) {
 		$theReturn = "$theReturn --overlayicon `"$SDIconOverlay`" "
 	}
-	
-
-
 	return $theReturn
 }
 
