@@ -88,6 +88,7 @@ function icon {
 		[Parameter(Mandatory = $false)] [double] $SDIconSize,
 		[Parameter(Mandatory = $false)] [iconPosition] $SDIconPosition,
 		[Parameter(Mandatory = $false)] [string] $SDIconOverlay,
+		[Parameter(Mandatory = $false)] [string] $SDIconOverlayBGColor,
 		[Parameter(Mandatory = $false)] [SFIconWeight] $SDSFIconWeight,
 		[Parameter(Mandatory = $false)] [SFAnimationType] $SDSFAnimationType,
 		[Parameter(Mandatory = $false)] [string] $SDSFIconColor,
@@ -220,13 +221,15 @@ function icon {
 
 	if($SDIconOverlay) {
 		$theReturn = "$theReturn --overlayicon `"$SDIconOverlay`" "
+
+		if($SDIconOverlayBGColor) {
+			$theReturn = "$theReturn,bgcolor=$SDIconOverlayBGColor "
+		}
+		
 	}
 	return $theReturn
 }
 
-function iconOverlay {
-
-}
 function mhalignment {
 	#only works if --style not used. Another parameter set, 
 	param (
