@@ -270,10 +270,20 @@ function subtitle {
 function title {
 	#not used for presentation style, add check later (maybe parameter set?)
 	param (
-		[Parameter(Mandatory = $true)][string] $SDTitle
+		[Parameter(Mandatory = $true)][string] $SDTitle,
+		#font color has to be hex, so #00A4C7 We are absolutely not checking this
+		[Parameter(Mandatory = $false)] [string] $SDTitleFontColor,
+		[Parameter(Mandatory = $false)] [double] $SDTitleFontSize,
+		[Parameter(Mandatory = $false)] [SFIconWeight] $SDTitleFontWeight,
+		#build a function using --listfonts to validate font name choices. Assigning that to a var creates
+		#an array that we can check for presence of name in
+		[Parameter(Mandatory = $false)] [string] $SDTitleFontName
 	)
 
-	return "$theReturn --title $SDTitle "
+	$theReturn = "$theReturn --title $SDTitle "
+	#deal with expanding the quoted string in the string, it has to have quotes. 
+
+	return $theReturn
 }
 
 
