@@ -78,7 +78,7 @@ function isValidFontName {
 	[System.Collections.ArrayList]$theTrimmedFonts = @()
 
 	#iterate through and build our array list, using out-null to suppress the index listing in the window
-	foreach($font in $theFonts) { 
+	foreach($font in $theInstalledFonts) { 
 		$theTrimmedFont = $font.Trim()  
 		$theTrimmedFonts.Add($theTrimmedFont) | Out-Null
 	}
@@ -374,7 +374,7 @@ function title {
 #$theIconPath = icon -SDSFIconName "rainbow" -SDSFIconColor "auto" -SDSFIconWeight "heavy" -SDSFAnimationType "variableiterativereversing"
 #$theIconPath
 
-$theTitleTest = title -SDTitle "test" -SDTitleFontWeight regular 
+$theTitleTest = title -SDTitle "test" -SDTitleFontName "getfucked"
 $theTitleTest
 
 #Invoke-Expression "$swiftDialogPath --title blah
