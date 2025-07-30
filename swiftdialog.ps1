@@ -374,8 +374,8 @@ function title {
 #$theIconPath = icon -SDSFIconName "rainbow" -SDSFIconColor "auto" -SDSFIconWeight "heavy" -SDSFAnimationType "variableiterativereversing"
 #$theIconPath
 
-$theTitleTest = title -SDTitle "test" -SDTitleFontName "getfucked"
-$theTitleTest
+#$theTitleTest = title -SDTitle "test" -SDTitleFontName "WorkplaceSans"
+#$theTitleTest
 
 #Invoke-Expression "$swiftDialogPath --title blah
 
