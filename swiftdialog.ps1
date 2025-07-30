@@ -1,4 +1,15 @@
-$swiftDialogPath = "/Applications/Dialog.app/Contents/MacOS/Dialog"
+$swiftDialogPath = ""
+
+#test for either dialog in /usr/local/bin or Dialog in /Applications/Dialog.app/Contents/MacOS
+#if neither exists, return error message
+if(Test-Path "/usr/local/bin/dialog") {
+	$swiftDialogPath = "/usr/local/bin/dialog"
+} elseif(Test-Path "/Applications/Dialog.app/Contents/MacOS/Dialog") {
+	$swiftDialogPath = "/Applications/Dialog.app/Contents/MacOS/Dialog"
+} else {
+	return "please install swift dialog before using this module"
+}
+
 $theReturn = "$swiftDialogPath"
 
 #We're using enums here because they help avoid the wrong params. PowerShell throws lovely errors
