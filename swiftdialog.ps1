@@ -66,6 +66,30 @@ enum winStyle {
 	warning
 }
 
+function isValidFontName {
+	param (
+		[Parameter(Mandatory = $true)] [string] $theFontName
+	)
+
+	#this returns an array of strings of all the fonts on the system
+	$theInstalledFonts = Invoke-Expression -Command "/Applications/Dialog.app/Contents/MacOS/Dialog --listfonts"
+
+	#because this adds whitespace to the front of each string, we shove this into an arraylist so we can get rid of that easier
+	[System.Collections.ArrayList]$theTrimmedFonts = @()
+
+	#iterate through and build our array list, using out-null to suppress the index listing in the window
+	foreach($font in $theFonts) { 
+		$theTrimmedFont = $font.Trim()  
+		$theTrimmedFonts.Add($theTrimmedFont) | Out-Null
+	}
+
+	#now test for the existence of the passed font name
+	$fontExists = $theTrimmedFonts -contains $theFontName
+
+	#return result
+	return $fontExists
+}
+
 function helpMessage {
 	param (
 		[Parameter(Mandatory = $true)][string] $SDHelpMessage
@@ -269,6 +293,7 @@ function subtitle {
 
 function title {
 	#not used for presentation style, add check later (maybe parameter set?)
+	
 	param (
 		[Parameter(Mandatory = $true)][string] $SDTitle,
 		#font color has to be hex, so #00A4C7 We are absolutely not checking this
@@ -279,17 +304,78 @@ function title {
 		#an array that we can check for presence of name in
 		[Parameter(Mandatory = $false)] [string] $SDTitleFontName
 	)
-
-	$theReturn = "$theReturn --title $SDTitle "
+	$titleFontParams = ""
+	
+	#the title text has to be quoted
+	$theReturn = "$theReturn --title `"$SDTitle`" "
 	#deal with expanding the quoted string in the string, it has to have quotes. 
+	
+	#title font color
+	if(($SDTitleFontColor) -and ([string]::IsNullOrEmpty($titleFontParams))) {
+		#this is the first param
+		$titleFontParams = "color=$SDTitleFontColor"
+	} elseif (($SDTitleFontColor) -and (-not [string]::IsNullOrEmpty($titleFontParams))) {
+		#there's already a param
+		$titleFontParams = "$titleFontParams,color=$SDTitleFontColor"
+	}
+
+	#title font weight
+	if(($SDTitleFontWeight) -and ([string]::IsNullOrEmpty($titleFontParams))) {
+		#this is the first param
+		$titleFontParams = "weight=$SDTitleFontWeight"
+	} elseif (($SDTitleFontWeight) -and (-not [string]::IsNullOrEmpty($titleFontParams))) {
+		#there's already a param
+		$titleFontParams = "$titleFontParams,weight=$SDTitleFontWeight"
+	}
+
+	#title font size
+	if(($SDTitleFontSize) -and ([string]::IsNullOrEmpty($titleFontParams))) {
+		#this is the first param
+		$titleFontParams = "size=$SDTitleFontSize"
+	} elseif (($SDTitleFontSize) -and (-not [string]::IsNullOrEmpty($titleFontParams))) {
+		#there's already a param
+		$titleFontParams = "$titleFontParams,size=$SDTitleFontSize"
+	}
+
+	#title font name, this will be fun
+	if(($SDTitleFontName) -and ([string]::IsNullOrEmpty($titleFontParams))) {
+		#this is the first param
+		#verify this is a valid font name
+		$isValidFont = isValidFontName -theFontName $SDTitleFontName
+		if($isValidFont) {
+			$titleFontParams = "name=$SDTitleFontName"
+		} else {
+			return "Font $SDTitleFontName does not exist on this system"
+		}	
+	} elseif (($SDTitleFontName) -and (-not [string]::IsNullOrEmpty($titleFontParams))) {
+
+		#verify this is a valid font name
+		$isValidFont = isValidFontName -theFontName $SDTitleFontName
+		if($isValidFont) {
+			$titleFontParams = "$titleFontParams,name=$SDTitleFontName"
+		} else {
+			return "Font $SDTitleFontName does not exist on this system"
+		}	
+	}
+
+	#check again for actual font params so we can properly quote them
+	if(-not [string]::IsNullOrEmpty($titleFontParams)) {
+		$titleFontParams = "`"$titleFontParams`""
+		
+		# add the title font params to $theReturn
+		$theReturn = "$theReturn --titlefont $titleFontParams "
+	}
 
 	return $theReturn
 }
 
 
 
-$theIconPath = icon -SDSFIconName "rainbow" -SDSFIconColor "auto" -SDSFIconWeight "heavy" -SDSFAnimationType "variableiterativereversing"
-$theIconPath
+#$theIconPath = icon -SDSFIconName "rainbow" -SDSFIconColor "auto" -SDSFIconWeight "heavy" -SDSFAnimationType "variableiterativereversing"
+#$theIconPath
+
+$theTitleTest = title -SDTitle "test" -SDTitleFontWeight regular 
+$theTitleTest
 
 #Invoke-Expression "$swiftDialogPath --title blah
 
