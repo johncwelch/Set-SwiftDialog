@@ -1,3 +1,6 @@
+#at some point, we'll need a catchall function to take all the initial parameters and decide how to build the command
+#if order of params doesn't matter, that would be tight
+
 $swiftDialogPath = ""
 
 #test for either dialog in /usr/local/bin or Dialog in /Applications/Dialog.app/Contents/MacOS
@@ -10,7 +13,7 @@ if(Test-Path "/usr/local/bin/dialog") {
 	return "please install swift dialog before using this module"
 }
 
-$theReturn = "$swiftDialogPath"
+$global:theReturn = "$swiftDialogPath"
 
 #We're using enums here because they help avoid the wrong params. PowerShell throws lovely errors
 #when you don't use the right values for the enums
@@ -263,6 +266,30 @@ function icon {
 		
 	}
 	return $theReturn
+}
+
+function image {
+	#to use image, it has to be a path OR a URL
+	#we are ignoring the base 64 thing unless people actually want it. 
+	#we'll figure out multiple images later, that will be a bear
+
+	param (
+		[Parameter(Mandatory = $true, ParameterSetName = 'imagePath')] [string] $SDImagePath,
+		[Parameter(Mandatory = $true, ParameterSetName = 'imageURL')] [string] $SDImageURL,
+		[Parameter(Mandatory = $false)] [string] $SDImageCaption
+	)
+
+	if($SDImagePath) {
+		$theReturn = "$theReturn --image `"$SDImagePath`" "
+	}
+
+	if($SDImageURL) {
+		$theReturn = "$theReturn --image `"$SDImageURL`" "
+	}
+
+	if($SDImageCaption) {
+		$theReturn = "$theReturn -- imagecaption `"$SDImageCaption`" "
+	}
 }
 
 function mhalignment {
