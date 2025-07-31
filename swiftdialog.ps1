@@ -271,7 +271,7 @@ function icon {
 function image {
 	#to use image, it has to be a path OR a URL
 	#we are ignoring the base 64 thing unless people actually want it. 
-	#we'll figure out multiple images later, that will be a bear
+	#we'll figure out multiple images later, that will be a bear, requires multiple --image params, ugh
 
 	param (
 		[Parameter(Mandatory = $true, ParameterSetName = 'imagePath')] [string] $SDImagePath,
