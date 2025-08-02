@@ -1,5 +1,11 @@
 #at some point, we'll need a catchall function to take all the initial parameters and decide how to build the command
-#if order of params doesn't matter, that would be tight
+#if order of params doesn't matter, that would be tight.
+
+#we can use if statements with -or for things with mulitple mandatory params like video or icon
+
+#having a main function calling other functions will require some form of error management
+
+#We can't just shove it all up into one function for every param since some params rely on other params. it would get messy
 
 $swiftDialogPath = ""
 
@@ -281,19 +287,18 @@ function image {
 
 	if($SDImagePath) {
 		$theReturn = "$theReturn --image `"$SDImagePath`" "
-		#since imagecaption only makes sense if there's an image path or URL, we put it in the main if blocks
-		#for both, so there's never an image caption sans an image
-		if($SDImageCaption) {
-		$theReturn = "$theReturn --imagecaption `"$SDImageCaption`" "
-		}
 	}
 
 	if($SDImageURL) {
 		$theReturn = "$theReturn --image `"$SDImageURL`" "
-		if($SDImageCaption) {
+		
+	}
+
+	#since to get into the function at all requires a path or a URL, we can just test for a caption here
+	if($SDImageCaption) {
 		$theReturn = "$theReturn --imagecaption `"$SDImageCaption`" "
 		}
-	}
+
 	return $theReturn
 }
 
@@ -410,6 +415,41 @@ function title {
 		
 		# add the title font params to $theReturn
 		$theReturn = "$theReturn --titlefont $titleFontParams "
+	}
+
+	return $theReturn
+}
+
+function video {
+	param (
+		[Parameter(Mandatory = $true, ParameterSetName = 'videopath')] [string] $SDVideoPath,
+		[Parameter(Mandatory = $true, ParameterSetName = 'videourl')] [string] $SDVideoURL,
+		[Parameter(Mandatory = $true, ParameterSetName = 'videoyoutube')] [string] $SDVideoYouTube,
+		[Parameter(Mandatory = $true, ParameterSetName = 'videovimeo')] [string] $SDVideoVimeo,
+		[Parameter(Mandatory = $false)] [string] $SDVideoCaption,
+		[Parameter(Mandatory = $false)] [bool] $SDVideoAutoplay
+	)
+
+	#check for which of the mandatory params
+	if($SDVideoPath) {
+		$theReturn = "$theReturn --video `"$SDVideoPath)`" "
+	} elseif($SDVideoURL) {
+		$theReturn = "$theReturn --video `"$SDVideoURL)`" "
+	} elseif($SDVideoYouTube) {
+		$theReturn = "$theReturn --video `"$SDVideoYouTube)`" "
+	} elseif($SDVideoVimeo) {
+		$theReturn = "$theReturn --video `"$SDVideoVimeo)`" "
+	} 
+
+	#handle captions. we don't care which type has been passed, since captions 
+	#don't care and the main type captions are mandatory
+	if($SDVideoCaption) {
+		$theReturn = "$theReturn --videocaption `"$SDVideoCaption`" "
+	}
+
+	#since the autoplay default is false, we only care if it's set to true
+	if($SDVideoAutoplay) {
+		$theReturn = "$theReturn --autoplay $SDVideoAutoplay "
 	}
 
 	return $theReturn
