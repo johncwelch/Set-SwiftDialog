@@ -281,35 +281,44 @@ function image {
 
 	if($SDImagePath) {
 		$theReturn = "$theReturn --image `"$SDImagePath`" "
+		#since imagecaption only makes sense if there's an image path or URL, we put it in the main if blocks
+		#for both, so there's never an image caption sans an image
+		if($SDImageCaption) {
+		$theReturn = "$theReturn --imagecaption `"$SDImageCaption`" "
+		}
 	}
 
 	if($SDImageURL) {
 		$theReturn = "$theReturn --image `"$SDImageURL`" "
+		if($SDImageCaption) {
+		$theReturn = "$theReturn --imagecaption `"$SDImageCaption`" "
+		}
 	}
-
-	if($SDImageCaption) {
-		$theReturn = "$theReturn -- imagecaption `"$SDImageCaption`" "
-	}
+	return $theReturn
 }
 
-function mhalignment {
-	#only works if --style not used. Another parameter set, 
+function message {
 	param (
-		[Parameter(Mandatory = $true)] [mhorizalign] $SDMessageHAlignment
+		[Parameter(Mandatory = $true)] [string] $SDMessage,
+		[Parameter(Mandatory = $false)] [mhorizalign] $SDMessageHAlignment,
+		[Parameter(Mandatory = $false)] [mvertalign] $SDMessageVAlignment
 	)
 
-	return "$theReturn --messagealignment $SDMessageHAlignment "
+	$theReturn = "$theReturn --message `"$SDMessage`" "
+
+	#there's a horizontal alignment param
+	if($SDMessageHAlignment) {
+		$theReturn = "$theReturn --messagealignment $SDMessageHAlignment "
+	}
+
+	#there's a vertical alignment param
+	if($SDMessageVAlignment) {
+		$theReturn = "$theReturn --messageposition $SDMessageVAlignment "
+	}
+
+	return $theReturn
 }
 
-function mvalignment {
-	#works with all styles but presentation
-	#title follows this in styled windows as well, WHY. Makes me want to make this exclusive too
-	param (
-		[Parameter(Mandatory = $true)] [mvertalign] $SDMessageVAlignment
-	)
-
-	return "$theReturn --messageposition $SDMessageVAlignment "
-}
 
 function style {
 	param (
