@@ -319,7 +319,6 @@ function message {
 	return $theReturn
 }
 
-
 function style {
 	param (
 		[Parameter(Mandatory = $true)] [winStyle] $SDDialogStyle
